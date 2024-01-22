@@ -1,0 +1,44 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+
+    <changeSet id="fillTableUser" author="TB" context="test">
+        <sql>
+            -- Insert data in table t_user
+            INSERT INTO t_user (id, first_name, last_name, role, email, password)
+            VALUES (100, 'John', 'Doe', 'ADMIN', 'john.doe@example.com', 'password123'),
+                   (101, 'Jane', 'Smith', 'CLIENT', 'jane.smith@example.com', 'securepass'),
+                   (102, 'wael', 'benamara', 'CLIENT', 'wael.amara@example.com', 'securepass'),
+                   (103, 'test', 'test', 'CLIENT', 'tes.amara@example.com', 'securepass');
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="fillTableAccount" author="TB" context="test">
+        <sql>
+            -- Insert data in table t_account
+            INSERT INTO t_account (id, balance, user_id)
+            VALUES (100, 1000.00, 100),
+                   (101, 500.00, 101),
+                   (102, 500.00, 102),
+                   (103, 500.00, 103);
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="fillTableOperation" author="TB" context="test">
+        <sql>
+            -- Insert data in table t_operation
+            INSERT INTO t_operation (id, operation_type, amount, account_id)
+            VALUES (100, 'DEPOSIT', 5.00, 100),
+                   (101, 'WITHDRAWAL', 50.00, 101),
+                   (102, 'WITHDRAWAL', 50.00, 102),
+                   (103, 'DEPOSIT', 50.00, 103);
+
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

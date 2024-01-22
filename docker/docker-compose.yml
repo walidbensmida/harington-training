@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: mypostgres
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  haringtonapp:
+    image: openjdk:17-oracle
+    container_name: harington-training
+    ports:
+      - "8080:8080"
+    command: ["java", "-jar", "chapitre1-0.0.1-SNAPSHOT.jar"]
+    working_dir: /app
+    volumes:
+      - ../target/harington-training-0.0.1-SNAPSHOT.jar:/app/harington-training-0.0.1-SNAPSHOT.jar
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
+  jenkins:
+    build:
+      dockerfile: DockerFile
+    container_name: jenkins
+    user: root
+    ports:
+      - "9090:8080"  # Change the host port to 9090
+    networks:
+      - mynetwork
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+networks:
+  mynetwork:
+    driver: bridge

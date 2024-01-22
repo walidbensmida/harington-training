@@ -1,0 +1,4 @@
+S - Single Responsibility Principle (Principe de Responsabilité Unique): Une classe ne devrait avoir qu'une seule raison de changer.
+Cela signifie qu'une classe doit avoir une seule responsabilité dans le système.
+
+Cette séparation des responsabilités rend le code plus clair, facilite la réutilisation des composants et respecte le principe de responsabilité unique.

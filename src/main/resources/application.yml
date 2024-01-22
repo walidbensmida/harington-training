@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: app
+  datasource:
+    #url: jdbc:postgresql://mypostgres:5432/mydatabase?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/mydatabase?createDatabaseIfNotExist=true
+    driver-class-name: org.postgresql.Driver
+    username: myuser
+    password: mypassword
+  sql:
+    init:
+      mode: never
+  application:
+    name: Bank
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    change-log: classpath:liquibase/db.changelog-master.yaml
+    enabled: true
+    contexts: app
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: 'true'
+    swagger:
+      v2:
+        enabled: 'true'
+rsa:
+  public-key: classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
+
+---
+
+
+
+
+

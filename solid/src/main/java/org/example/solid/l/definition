@@ -1,0 +1,2 @@
+ Liskov Substitution Principle (Principe de substitution de Liskov):
+ Les objets d'une classe de base doivent pouvoir être remplacés par des objets de sous-classes sans affecter la cohérence du programme.

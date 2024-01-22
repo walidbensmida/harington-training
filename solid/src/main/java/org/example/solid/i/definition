@@ -1,0 +1,2 @@
+Interface Segregation Principle (Principe de ségrégation d'interface): Il vaut mieux avoir plusieurs interfaces spécifiques qu'une interface générale.
+ Les classes ne devraient pas être forcées de mettre en œuvre des interfaces qu'elles n'utilisent pas.

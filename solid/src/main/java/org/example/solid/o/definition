@@ -1,0 +1,2 @@
+O - Open/Closed Principle (Principe Ouvert/Fermé): Les entités logicielles (classes, modules, fonctions, etc.) doivent être ouvertes pour extension mais fermées pour modification.
+En d'autres termes, vous devriez pouvoir étendre le comportement d'une classe sans la modifier.

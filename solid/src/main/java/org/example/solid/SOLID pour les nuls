@@ -1,0 +1,34 @@
+
+
+Single Responsibility Principle (SRP) - Principe de responsabilité unique:
+
+S
+Idée principale: Une classe devrait faire une seule chose et la faire bien.
+Analogie: Imaginez une personne dans un restaurant. Le serveur prend les commandes, le cuisinier prépare la nourriture, et le serveur la sert. Chacun a une seule responsabilité.
+Open/Closed Principle (OCP) - Principe ouvert/fermé:
+
+
+O
+Idée principale: Une classe devrait être ouverte à l'extension mais fermée à la modification.
+Analogie: Pensez à une boîte à outils. Vous pouvez ajouter de nouveaux outils sans changer la boîte elle-même.
+
+
+L
+Liskov Substitution Principle (LSP) - Principe de substitution de Liskov:
+Idée principale: Les objets d'une classe de base devraient pouvoir être remplacés par des objets de sous-classes sans altérer le bon fonctionnement du programme.
+Analogie: Si un jouet voiture peut être remplacé par un jouet camion dans un circuit sans que rien ne casse, alors cela respecte le principe.
+
+
+I
+Interface Segregation Principle (ISP) - Principe de ségrégation de l'interface:
+Idée principale: Une classe cliente ne devrait pas être forcée à implémenter des interfaces qu'elle n'utilise pas.
+Analogie: Si vous n'utilisez qu'une partie d'une application, vous ne devriez pas être obligé de télécharger l'application entière.
+
+
+D
+Dependency Inversion Principle (DIP) - Principe d'inversion de dépendance:
+Idée principale: Les modules de haut niveau ne devraient pas dépendre des détails de bas niveau, mais plutôt des abstractions.
+Analogie: Quand vous conduisez une voiture, vous n'avez pas besoin de connaître tous les détails internes du moteur. Vous avez juste besoin de savoir comment utiliser le volant et les pédales.
+
+
+En gros, les principes SOLID visent à rendre le code plus flexible, compréhensible et facile à maintenir en évitant les pièges courants tels que les classes surchargées de responsabilités, les modifications fréquentes, et les dépendances rigides. Ils fournissent des guides pour écrire un code plus propre et plus modulaire.
