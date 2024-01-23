@@ -1,0 +1,19 @@
+spring:
+#  profiles:
+#    active: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+    h2:
+      console:
+        enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  liquibase:
+    change-log: classpath:liquibase/db.changelog-master.yaml
+    enabled: true
+    contexts: test

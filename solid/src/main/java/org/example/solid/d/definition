@@ -1,0 +1,3 @@
+Dependency Inversion Principle (Principe d'inversion de dépendance): Les modules de haut niveau ne devraient pas dépendre des modules de bas niveau.
+Les deux devraient dépendre d'abstractions.
+De plus, les abstractions ne devraient pas dépendre des détails, mais les détails devraient dépendre des abstractions.

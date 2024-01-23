@@ -1,0 +1,69 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+
+    <changeSet id="createUserTable" author="TB" context="app, test">
+        <sql>
+            CREATE TABLE t_user
+            (
+                id         SERIAL PRIMARY KEY,
+                first_name VARCHAR(255),
+                last_name  VARCHAR(255),
+                role       VARCHAR(50),
+                email      VARCHAR(255),
+                password   VARCHAR(255),
+                account_id INTEGER  NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="createOperationTable" author="TB" context="app, test">
+        <sql>
+            CREATE TABLE t_operation
+            (
+                id             SERIAL PRIMARY KEY,
+                operation_type VARCHAR(50),
+                amount         FLOAT,
+                account_id     INTEGER  NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="createAccountTable" author="TB" context="app, test">
+        <sql>
+            CREATE TABLE t_account
+            (
+                id      SERIAL PRIMARY KEY,
+                balance FLOAT,
+                user_id INTEGER  NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="addFKUserAccount" author="TB" context="app, test">
+        <sql>
+            ALTER TABLE t_user
+                ADD CONSTRAINT fk_user_account
+                    FOREIGN KEY (account_id) REFERENCES t_account (id) ON DELETE CASCADE;
+        </sql>
+    </changeSet>
+
+    <changeSet id="addFKAccountUser" author="TB" context="app, test">
+        <sql>
+            ALTER TABLE t_account
+                ADD CONSTRAINT fk_account_user FOREIGN KEY (user_id) REFERENCES t_user (id) ON DELETE CASCADE;
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="addFKAccountOperation" author="TB" context="app, test">
+        <sql>
+            ALTER TABLE t_operation
+                ADD CONSTRAINT fk_account_operation FOREIGN KEY (account_id) REFERENCES t_account (id) ON DELETE CASCADE;
+
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
