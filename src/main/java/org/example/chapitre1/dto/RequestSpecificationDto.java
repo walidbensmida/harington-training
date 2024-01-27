@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class RequestDto {
+public class RequestSpecificationDto {
     private List<SearchRequestDto> searchRequestDto;
     private GlobOperator globOperator;
 
