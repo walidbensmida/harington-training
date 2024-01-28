@@ -1,20 +1,25 @@
 package org.example.chapitre1.service;
 
 import org.example.chapitre1.dto.UserDto;
+import org.example.chapitre1.dto.UserRequest;
 import org.example.chapitre1.dto.mapper.UserMapper;
 import org.example.chapitre1.entity.RoleEnum;
 import org.example.chapitre1.entity.User;
 import org.example.chapitre1.exception.UserNotFoundException;
 import org.example.chapitre1.repository.UserRepository;
+import org.example.chapitre1.repository.user.criteria.IUserJdbcRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -28,6 +33,11 @@ class UserServiceTest {
     @Mock
     private UserMapper userMapper;
 
+    @Mock
+    private UserPredicate userPredicate;
+
+    @Mock
+    IUserJdbcRepository iUserJdbcRepository;
 
     @InjectMocks
     private UserService userService;
@@ -111,8 +121,69 @@ class UserServiceTest {
         verify(userRepository, times(1)).deleteById(userIdToDelete);
     }
 
+    @Test
+    void should_return_empty_list_when_find_stream_dynamic_users_with_not_existing_users() {
+        List<User> usersMockData = List.of(getUser());
+        doReturn(usersMockData).when(userRepository).findAll();
+        doReturn(buildPredicate(getNotExistingUserRequest())).when(userPredicate).buildPredicate(getNotExistingUserRequest());
+        List<UserDto> usersDto = userService.dynamicSearchWithStream(getNotExistingUserRequest());
+        assertThat(usersDto).isEmpty();
+    }
+
+    @Test
+    void should_return_user_when_find_stream_dynamic_users_with_existing_users() {
+        List<User> usersMockData = List.of(getUser());
+        doReturn(usersMockData).when(userRepository).findAll();
+        doReturn(getUserDto()).when(userMapper).entityToDto(getUser());
+        doReturn(buildPredicate(getExistingUserRequest())).when(userPredicate).buildPredicate(getExistingUserRequest());
+        List<UserDto> usersDto = userService.dynamicSearchWithStream(getExistingUserRequest());
+        assertThat(usersDto).isNotEmpty().hasSize(1);
+    }
+
+    @Test
+    void should_return_empty_list_when_find_jdbc_dynamic_users_with_not_existing_users() {
+        doReturn(new ArrayList<User>()).when(iUserJdbcRepository).dynamicSearch(getNotExistingUserRequest());
+        List<UserDto> usersDto = userService.dynamicSearchWithJdbc(getNotExistingUserRequest());
+        assertThat(usersDto).isEmpty();
+    }
+
+    @Test
+    void should_return_empty_list_when_find_jdbc_dynamic_users_with_existing_users() {
+        List<User> usersMockData = List.of(getUser());
+        doReturn(usersMockData).when(iUserJdbcRepository).dynamicSearch(getExistingUserRequest());
+        doReturn(getUserDto()).when(userMapper).entityToDto(getUser());
+        List<UserDto> usersDto = userService.dynamicSearchWithJdbc(getExistingUserRequest());
+        assertThat(usersDto).isNotEmpty().hasSize(1);
+    }
+
+    private Predicate<User> buildPredicate(UserRequest userRequest) {
+        return user -> user.getFirstName().contains(userRequest.getFirstName())
+                && user.getLastName().contains(userRequest.getLastName())
+                && user.getEmail().contains(userRequest.getEmail());
+    }
+
+    private UserRequest getExistingUserRequest() {
+        return UserRequest.builder()
+                .firstName("wael")
+                .lastName("amara")
+                .email("wael.amara@example.com")
+                .build();
+    }
+
+    private UserRequest getNotExistingUserRequest() {
+        return UserRequest.builder()
+                .firstName("not_existing")
+                .lastName("not_existing")
+                .email("not_existing")
+                .build();
+    }
+
     private User getUser() {
-        return User.builder().id(101L).firstName("firstname").lastName("lastname").role(RoleEnum.CLIENT).email("test@gmail.com").password("test").build();
+        return User.builder().id(101L).firstName("wael").lastName("amara").role(RoleEnum.CLIENT).email("wael.amara@example.com").password("test").build();
+    }
+
+    private UserDto getUserDto() {
+        return UserDto.builder().id(101L).firstName("wael").lastName("amara").role(RoleEnum.CLIENT).email("wael.amara@example.com").password("test").build();
     }
 
 }

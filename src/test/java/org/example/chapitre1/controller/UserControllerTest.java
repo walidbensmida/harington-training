@@ -2,32 +2,20 @@ package org.example.chapitre1.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Inject;
-import org.example.chapitre1.dto.AccountDto;
 import org.example.chapitre1.dto.UserDto;
+import org.example.chapitre1.dto.UserRequest;
 import org.example.chapitre1.entity.RoleEnum;
-import org.example.chapitre1.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -39,6 +27,8 @@ class UserControllerTest {
 
     private static final String API_GET_AND_DELETE_USER_BY_ID = "/api/v1/users/{id}";
     private static final String API_CREATE_AND_GET_ALL_USERS = "/api/v1/users";
+    private static final String API_DYNAMIC_SEARCH_WITH_STREAM = "/api/v1/users/search-stream";
+    private static final String API_DYNAMIC_SEARCH_WITH_JDBC = "/api/v1/users/search-jdbc";
 
     @Inject
     protected MockMvc mockMvc;
@@ -92,5 +82,60 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    /*************************************************** Dynamic search stream *****************************************************************/
+    @Test
+    public void should_return_ok_when_find_dynamic_users_and_users_list_is_not_empty() throws Exception {
+        mockMvc.perform(post(API_DYNAMIC_SEARCH_WITH_STREAM)
+                        .content(new ObjectMapper().writeValueAsString(getExistingUserRequest()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void should_return_ok_when_find_dynamic_users_and_users_list_is_empty() throws Exception {
+        mockMvc.perform(post(API_DYNAMIC_SEARCH_WITH_STREAM)
+                        .content(new ObjectMapper().writeValueAsString(getNotExistingUserRequest()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    /*************************************************** Dynamic search jdbc *****************************************************************/
+    @Test
+    public void should_return_ok_when_find_dynamic_users_and_users_list_is_not_empty_with_jdbc_method() throws Exception {
+        mockMvc.perform(post(API_DYNAMIC_SEARCH_WITH_JDBC)
+                        .content(new ObjectMapper().writeValueAsString(getExistingUserRequest()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void should_return_ok_when_find_dynamic_users_and_users_list_is_empty_with_jdbc_method() throws Exception {
+        mockMvc.perform(post(API_DYNAMIC_SEARCH_WITH_JDBC)
+                        .content(new ObjectMapper().writeValueAsString(getNotExistingUserRequest()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    private UserRequest getExistingUserRequest() {
+        return UserRequest.builder()
+                .firstName("wael")
+                .lastName("amara")
+                .email("wael.amara@example.com")
+                .build();
+    }
+
+    private UserRequest getNotExistingUserRequest() {
+        return UserRequest.builder()
+                .firstName("not_existing")
+                .lastName("not_existing")
+                .email("not_existing")
+                .build();
+    }
+
 
 }
