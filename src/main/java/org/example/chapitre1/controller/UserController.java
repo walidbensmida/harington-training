@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.chapitre1.dto.UserDto;
+import org.example.chapitre1.dto.UserRequest;
 import org.example.chapitre1.exception.UserNotFoundException;
 import org.example.chapitre1.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,22 @@ public class UserController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id) throws UserNotFoundException {
         userService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation("dynamic search with Stream")
+    @PostMapping(path = "/v1/users/search-stream")
+    public ResponseEntity<List<UserDto>> dynamicSearchStream(@RequestBody UserRequest userRequest){
+        log.info("dynamic search with Stream");
+        List<UserDto> usersFiltered = userService.dynamicSearchWithStream(userRequest);
+        return ResponseEntity.ok().body(usersFiltered);
+    }
+
+    @ApiOperation("dynamic search with Jdbc")
+    @PostMapping(path = "/v1/users/search-jdbc")
+    public ResponseEntity<List<UserDto>> dynamicSearchJdbc(@RequestBody UserRequest userRequest){
+        log.info("dynamic search with Stream");
+        List<UserDto> usersFiltered = userService.dynamicSearchWithJdbc(userRequest);
+        return ResponseEntity.ok().body(usersFiltered);
     }
 
 
