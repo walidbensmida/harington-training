@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "3bee6b5c-4376-4a8c-92b3-2fc52efe0a1b",
 		"name": "harington-training-collection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "9886523"
 	},
 	"item": [
@@ -32,18 +32,10 @@
 					"request": {
 						"auth": {
 							"type": "basic",
-							"basic": [
-								{
-									"key": "username",
-									"value": "user",
-									"type": "string"
-								},
-								{
-									"key": "password",
-									"value": "1234",
-									"type": "string"
-								}
-							]
+							"basic": {
+								"username": "user",
+								"password": "1234"
+							}
 						},
 						"method": "POST",
 						"header": [
@@ -62,18 +54,7 @@
 							"mode": "raw",
 							"raw": ""
 						},
-						"url": {
-							"raw": "http://localhost:8080/oauth/token",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"oauth",
-								"token"
-							]
-						}
+						"url": "http://localhost:8080/oauth/token"
 					},
 					"response": []
 				}
@@ -103,13 +84,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -122,17 +99,87 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/users",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users"
-							]
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/users"
+					},
+					"response": []
+				},
+				{
+					"name": "dynamic search with stream",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (tests[\"Status code is 201\"] = responseCode.code === 201)\r",
+									"\r",
+									"{\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"user_id\", jsonData.id)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
 						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{access_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"role\": \"\",\r\n    \"email\": \"wael@test.fr\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/users/search-stream"
+					},
+					"response": []
+				},
+				{
+					"name": "dynamic search with jdbc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (tests[\"Status code is 201\"] = responseCode.code === 201)\r",
+									"\r",
+									"{\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"user_id\", jsonData.id)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{access_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"wael\",\r\n    \"lastName\": \"\",\r\n    \"role\": \"\",\r\n    \"email\": \"wael@test.fr\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/users/search-jdbc"
 					},
 					"response": []
 				},
@@ -144,13 +191,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -163,18 +206,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/users/1",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"1"
-							]
-						}
+						"url": "http://localhost:8080/api/v1/users/1"
 					},
 					"response": []
 				},
@@ -186,13 +218,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -205,17 +233,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/users",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/users"
 					},
 					"response": []
 				},
@@ -224,13 +242,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "DELETE",
 						"header": [],
@@ -243,18 +257,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/users/1",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"1"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/users/1"
 					},
 					"response": []
 				}
@@ -284,13 +287,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -303,19 +302,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/accounts",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"accounts"
-							]
-						}
+						"url": "http://localhost:8080/api/v1/accounts"
 					},
 					"response": []
 				},
@@ -327,13 +314,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -346,17 +329,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/accounts",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"accounts"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/accounts"
 					},
 					"response": []
 				},
@@ -368,13 +341,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -387,18 +356,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/accounts/1",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"accounts",
-								"1"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/accounts/1"
 					},
 					"response": []
 				},
@@ -407,13 +365,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "DELETE",
 						"header": [],
@@ -426,18 +380,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/accounts/1",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"accounts",
-								"1"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/accounts/1"
 					},
 					"response": []
 				}
@@ -451,13 +394,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
@@ -470,17 +409,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/operations",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"operations"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/operations"
 					},
 					"response": []
 				},
@@ -492,13 +421,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -511,18 +436,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/operations/1",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"operations",
-								"1"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/operations/1"
 					},
 					"response": []
 				},
@@ -534,13 +448,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -553,17 +463,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/operations",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"operations"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/operations"
 					},
 					"response": []
 				},
@@ -572,13 +472,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{access_token}}"
+							}
 						},
 						"method": "DELETE",
 						"header": [],
@@ -591,18 +487,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{HARINGTON_TRAINING_URL}}/api/v1/operations/1",
-							"host": [
-								"{{HARINGTON_TRAINING_URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"operations",
-								"1"
-							]
-						}
+						"url": "{{HARINGTON_TRAINING_URL}}/api/v1/operations/1"
 					},
 					"response": []
 				}

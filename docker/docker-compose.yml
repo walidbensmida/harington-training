@@ -10,8 +10,6 @@ services:
       POSTGRES_PASSWORD: mypassword
     ports:
       - "5432:5432"
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
     networks:
       - mynetwork
 
@@ -19,8 +17,8 @@ services:
     image: openjdk:17-oracle
     container_name: harington-training
     ports:
-      - "8080:8080"
-    command: ["java", "-jar", "chapitre1-0.0.1-SNAPSHOT.jar"]
+      - "8088:8088"
+    command: ["java", "-jar", "harington-training-0.0.1-SNAPSHOT.jar"]
     working_dir: /app
     volumes:
       - ../target/harington-training-0.0.1-SNAPSHOT.jar:/app/harington-training-0.0.1-SNAPSHOT.jar
