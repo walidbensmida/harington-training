@@ -1,7 +1,7 @@
 package org.example.chapitre1.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.chapitre1.dto.RequestFilterDto;
+import org.example.chapitre1.dto.ListRequestFilterDto;
 import org.example.chapitre1.dto.RequestSpecificationDto;
 import org.example.chapitre1.dto.UserDto;
 import org.example.chapitre1.service.UserService;
@@ -25,14 +25,13 @@ public class FilterController {
 
     @PostMapping("/specification")
     public ResponseEntity<List<UserDto>> getUsers(@RequestBody RequestSpecificationDto requestSpecificationDto) {
-        Specification specification = filterSpecificationService.getSearchSpeciation(requestSpecificationDto.getSearchRequestDto(), requestSpecificationDto.getGlobOperator());
+        Specification specification = filterSpecificationService.getSearchSpeciation(requestSpecificationDto.getSearchRequestDto(), requestSpecificationDto.getGlobalOperator());
         return ResponseEntity.ok().body(userService.findAll(specification));
-
     }
 
     @PostMapping
-    public ResponseEntity<List<UserDto>> getUsersByFunctionalInterface(@RequestBody RequestFilterDto requestDto) {
-        return ResponseEntity.ok().body(userService.findAllByFilter(requestDto.getFilter(), requestDto.getValue()));
+    public ResponseEntity<List<UserDto>> getUsersByFunctionalInterface(@RequestBody ListRequestFilterDto listRequestFilterDto) {
+        return ResponseEntity.ok().body(userService.findAllByFilter(listRequestFilterDto.getRequestFilterDtoList(), listRequestFilterDto.getOperationType()));
     }
 
 }

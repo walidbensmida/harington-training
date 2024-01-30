@@ -13,17 +13,16 @@ import java.util.List;
 public class FilterSpecificationService<T> {
 
 
-    public Specification<T> getSearchSpeciation(List<SearchRequestDto> searchRequestDtos, RequestSpecificationDto.GlobOperator globOperator) {
+    public Specification<T> getSearchSpeciation(List<SearchRequestDto> searchRequestDtos, RequestSpecificationDto.GlobalOperator globalOperator) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             for (SearchRequestDto searchRequestDto : searchRequestDtos) {
                 Predicate predicate = criteriaBuilder.equal(root.get(searchRequestDto.getColumnSearch()), searchRequestDto.getValueSearch());
                 predicates.add(predicate);
             }
-            return switch (globOperator) {
+            return switch (globalOperator) {
                 case AND -> criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 case OR -> criteriaBuilder.or(predicates.toArray(new Predicate[0]));
-                default -> throw new RuntimeException(new UnsupportedOperationTypeException());
             };
 
         };

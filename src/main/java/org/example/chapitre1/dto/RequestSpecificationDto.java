@@ -7,10 +7,10 @@ import java.util.List;
 @Data
 public class RequestSpecificationDto {
     private List<SearchRequestDto> searchRequestDto;
-    private GlobOperator globOperator;
+    private GlobalOperator globalOperator;
 
 
-    public enum GlobOperator {
+    public enum GlobalOperator {
         AND, OR
     }
 }

@@ -40,5 +40,15 @@
         </sql>
     </changeSet>
 
+    <changeSet id="fillTableUserForFilter" author="TB" context="test">
+        <sql>
+            -- Insert data in table t_user
+            INSERT INTO t_user (id, first_name, last_name, role, email, password)
+            VALUES (155, 'firstnametest', 'lastnametest', 'ADMIN', 'lastnametest.doe@example.com', 'password123'),
+                   (156, 'anotherExpectedFirstName', 'lastnametest', 'CLIENT', 'anotherExpectedLastName.smith@example.com', 'securepass')
+
+        </sql>
+    </changeSet>
+
 
 </databaseChangeLog>

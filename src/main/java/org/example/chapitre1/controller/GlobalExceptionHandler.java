@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(UnsupportedFilterTypeException.class)
     public ResponseEntity<String> handleUnsupportedFilterTypeException(UnsupportedFilterTypeException ex) {
         return new ResponseEntity<>("Filter not found", HttpStatus.NOT_FOUND);
     }
