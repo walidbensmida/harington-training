@@ -11,6 +11,7 @@ import org.example.chapitre1.entity.User;
 import org.example.chapitre1.exception.UnsupportedGlobalOperationFilterTypeException;
 import org.example.chapitre1.exception.UserNotFoundException;
 import org.example.chapitre1.repository.UserRepository;
+import org.example.chapitre1.service.searchCriteria.FilterSpecificationService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final FilterSpecificationService filterSpecificationService;
+
 
     public List<UserDto> findAll() {
         List<User> users = userRepository.findAll();
@@ -45,7 +48,9 @@ public class UserService {
         return userMapper.entityToDto(userRepository.save(user));
     }
 
-    public List<UserDto> findAll(Specification specification) {
+    public List<UserDto> findAllBySpecification(RequestSpecificationDto requestSpecificationDto) {
+        Specification specification = filterSpecificationService.getSearchSpeciation(requestSpecificationDto.getSearchRequestDto(), requestSpecificationDto.getGlobalOperator());
+
         List<User> users = userRepository.findAll(specification);
         return users.stream().map(userMapper::entityToDto).collect(Collectors.toList());
     }

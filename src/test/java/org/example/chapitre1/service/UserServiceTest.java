@@ -1,9 +1,6 @@
 package org.example.chapitre1.service;
 
-import org.example.chapitre1.dto.FilterType;
-import org.example.chapitre1.dto.RequestFilterDto;
-import org.example.chapitre1.dto.RequestSpecificationDto;
-import org.example.chapitre1.dto.UserDto;
+import org.example.chapitre1.dto.*;
 import org.example.chapitre1.dto.mapper.UserMapper;
 import org.example.chapitre1.entity.RoleEnum;
 import org.example.chapitre1.entity.User;
@@ -14,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +33,7 @@ class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
+
 
 
     @Test
@@ -155,6 +154,37 @@ class UserServiceTest {
         doReturn(userDto1).when(userMapper).entityToDto(user1);
         doReturn(userDto2).when(userMapper).entityToDto(user2);
         List<UserDto> usersFinded = userService.findAllByFilter(requestFilterDtoList, RequestSpecificationDto.GlobalOperator.OR);
+        assertAll("Grouped Assertions of findAllByFilter Users with global operator is AND",
+                () -> assertEquals(usersFinded.size(), 2),
+                () -> assertEquals(usersFinded.get(0).getFirstName(), "firstname"),
+                () -> assertEquals(usersFinded.get(0).getLastName(), "lastname"),
+                () -> assertEquals(usersFinded.get(0).getRole(), RoleEnum.CLIENT),
+                () -> assertEquals(usersFinded.get(0).getEmail(), "test@gmail.com"),
+                () -> assertEquals(usersFinded.get(1).getFirstName(), "firstname1"),
+                () -> assertEquals(usersFinded.get(1).getLastName(), "lastname2"),
+                () -> assertEquals(usersFinded.get(1).getRole(), RoleEnum.CLIENT),
+                () -> assertEquals(usersFinded.get(1).getEmail(), "test@gmail.com"));
+    }
+
+    @Test
+    void givenRequestSpecificationDto_whenFindAllBySpecificationOperationIsOr_thenFindUsers() throws UserNotFoundException {
+        SearchRequestDto searchRequestDto1 = new SearchRequestDto("firstName","firstnametest");
+        SearchRequestDto searchRequestDto2 = new SearchRequestDto("lastName","lastnametest");
+        List<SearchRequestDto> searchRequestDtos = Arrays.asList(searchRequestDto1,searchRequestDto2);
+        RequestSpecificationDto.GlobalOperator and = RequestSpecificationDto.GlobalOperator.AND;
+        RequestSpecificationDto.GlobalOperator or = RequestSpecificationDto.GlobalOperator.OR;
+        RequestSpecificationDto requestSpecificationDtoAnd = new RequestSpecificationDto(searchRequestDtos,and);
+        RequestSpecificationDto requestSpecificationDtoOr= new RequestSpecificationDto(searchRequestDtos,or);
+
+        List<User> users = getUsers();
+        User user1 = users.get(0);
+        User user2 = users.get(1);
+        UserDto userDto1= getUserDto(user1);
+        UserDto userDto2= getUserDto(user2);
+        when(userRepository.findAll(any(Specification.class))).thenReturn(users);
+        doReturn(userDto1).when(userMapper).entityToDto(user1);
+        doReturn(userDto2).when(userMapper).entityToDto(user2);
+        List<UserDto> usersFinded = userService.findAllBySpecification(requestSpecificationDtoOr);
         assertAll("Grouped Assertions of findAllByFilter Users with global operator is AND",
                 () -> assertEquals(usersFinded.size(), 2),
                 () -> assertEquals(usersFinded.get(0).getFirstName(), "firstname"),

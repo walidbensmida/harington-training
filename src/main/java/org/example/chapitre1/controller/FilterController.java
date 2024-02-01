@@ -5,8 +5,6 @@ import org.example.chapitre1.dto.ListRequestFilterDto;
 import org.example.chapitre1.dto.RequestSpecificationDto;
 import org.example.chapitre1.dto.UserDto;
 import org.example.chapitre1.service.UserService;
-import org.example.chapitre1.service.searchCriteria.FilterSpecificationService;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +19,10 @@ import java.util.List;
 public class FilterController {
 
     private final UserService userService;
-    private final FilterSpecificationService filterSpecificationService;
 
     @PostMapping("/specification")
     public ResponseEntity<List<UserDto>> getUsers(@RequestBody RequestSpecificationDto requestSpecificationDto) {
-        Specification specification = filterSpecificationService.getSearchSpeciation(requestSpecificationDto.getSearchRequestDto(), requestSpecificationDto.getGlobalOperator());
-        return ResponseEntity.ok().body(userService.findAll(specification));
+        return ResponseEntity.ok().body(userService.findAllBySpecification(requestSpecificationDto));
     }
 
     @PostMapping
